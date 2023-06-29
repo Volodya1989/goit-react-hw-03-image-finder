@@ -1,11 +1,8 @@
-import { ButtonStyled, Span } from './Button.styled';
-import { BsSearch } from 'react-icons/bs';
+import { ButtonStyled } from './Button.styled';
 const Button = () => {
   return (
-    <ButtonStyled type="submit">
-      <Span className="button-label">
-        <BsSearch />
-      </Span>
+    <ButtonStyled type="button">
+    Load more
     </ButtonStyled>
   );
 };
