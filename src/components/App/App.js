@@ -13,6 +13,7 @@ export class App extends Component {
     query: '',
     pageCounter: 1,
     showModal: false,
+    activeImg: '',
   };
 
   componentDidMount() {}
@@ -20,10 +21,13 @@ export class App extends Component {
     const { query, pageCounter } = this.state;
 
     if (prevState.query !== query && query !== '') {
-      this.onGettingImages(query, pageCounter);
+      this.setState({
+        pictures: [],
+      });
+      this.onGettingImages(query, pageCounter, query);
     }
     if (prevState.pageCounter !== pageCounter) {
-      this.onGettingImages(query, pageCounter);
+      this.onGettingImages(query, pageCounter, query);
     }
   }
 
@@ -57,25 +61,32 @@ export class App extends Component {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
-    console.log('showModal', this.state.showModal);
   };
 
-  onClick = id => {
-    console.log('click');
-    console.log('id', id);
+  onClick = (e, img) => {
+    this.setState({
+      activeImg: img,
+    });
+
     this.toggleModal();
   };
 
   render() {
-    const { pictures, showModal } = this.state;
+    const { pictures, showModal, activeImg } = this.state;
     const isButtonDisplayed = pictures.length !== 0;
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
 
-        <ImageGallery data={pictures} onClick={id => this.onClick(id)} />
+        <ImageGallery data={pictures} onClick={this.onClick} />
         {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
-        {showModal && <Modal onClick={() => this.toggleModal()} />}
+        {showModal && (
+          <Modal
+            activeImg={activeImg}
+            showModal={showModal}
+            onClose={this.toggleModal}
+          />
+        )}
       </Container>
     );
   }

@@ -7,6 +7,7 @@ export const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
+  margin-bottom: 2%;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.8);
@@ -24,15 +25,15 @@ export const ModalImg = styled.img`
 
 export const CloseBtn = styled.button`
   position: absolute;
-  top: 22px;
-  right: 12px;
+  top: 0;
+  right: -22px;
   cursor: pointer;
   border: none;
-  width: 24;
-  height: 24;
+  width: 24px;
+  height: 24px;
   text-align: center;
   line-height: 0;
-
+  color: white;
   font-size: 30px;
   font-weight: 700;
 
@@ -43,15 +44,3 @@ export const CloseBtn = styled.button`
     color: white;
   }
 `;
-
-//NEED TO BE MODIFIED
-// export const ImageModal = styled.img`
-//   width: 100%;
-//   height: 260px;
-//   object-fit: cover;
-//   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
-//   &:hover {
-//     transform: scale(1.03);
-//     cursor: zoom-in;
-//   }
-// `;

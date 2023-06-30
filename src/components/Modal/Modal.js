@@ -3,16 +3,35 @@ import { createPortal } from 'react-dom';
 import { Overlay, ModalStyled, CloseBtn, ModalImg } from './Modal.styled';
 const modalRootEl = document.querySelector('#modal-root');
 class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = e => {
+    if (e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
+
+  handleBackdropClick = e => {
+    if (e.target === e.currentTarget) {
+      this.props.onClose();
+    }
+  };
+
   render() {
     return createPortal(
-      <Overlay>
-        <ModalStyled className="modal">
+      <Overlay onClick={this.handleBackdropClick}>
+        <ModalStyled>
           <ModalImg
             className="modalImg"
-            src="https://pixabay.com/get/gb955733479ca593e5f03c8e4fd01312e602378809fe3d0b1c58a0d67704c98cd43985f93555b3acb0cbfeb74b27453730d4fc4cfd5398bf879c6ba65e10fddd6_1280.jpg"
-            alt=""
+            src={this.props.activeImg}
+            alt="large image"
           />
-          <CloseBtn type="button" onClick={() => this.props.onClick()}>
+          <CloseBtn type="button" onClick={() => this.props.onClose()}>
             &times;
           </CloseBtn>
         </ModalStyled>
