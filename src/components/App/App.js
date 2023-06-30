@@ -13,6 +13,7 @@ export class App extends Component {
     query: '',
     pageCounter: 1,
     showModal: false,
+    activeImg: '',
   };
 
   componentDidMount() {}
@@ -57,25 +58,33 @@ export class App extends Component {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
-    console.log('showModal', this.state.showModal);
   };
 
-  onClick = id => {
+  onClick = (e, img) => {
     console.log('click');
-    console.log('id', id);
+    console.log('e', e.target);
+    console.log('id', img);
+    this.setState({
+      activeImg: img,
+    });
+    console.log('thisState', this.state.activeImg);
+
     this.toggleModal();
+    console.log('activeImg', this.state.activeImg);
   };
 
   render() {
-    const { pictures, showModal } = this.state;
+    const { pictures, showModal, activeImg } = this.state;
     const isButtonDisplayed = pictures.length !== 0;
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
 
-        <ImageGallery data={pictures} onClick={id => this.onClick(id)} />
+        <ImageGallery data={pictures} onClick={this.onClick} />
         {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
-        {showModal && <Modal onClick={() => this.toggleModal()} />}
+        {showModal && (
+          <Modal activeImg={activeImg} onClick={() => this.toggleModal()} />
+        )}
       </Container>
     );
   }
