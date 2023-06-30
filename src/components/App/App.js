@@ -9,18 +9,19 @@ import ImageGallery from 'components/ImageGallery';
 import Searchbar from 'components/Searchbar';
 export class App extends Component {
   state = {
-    pictures: {},
+    pictures: [],
     query: '',
     pageCounter: 1,
   };
 
-  componentDidMount() {
-    console.log('componentDidMount');
-  }
+  componentDidMount() {}
   componentDidUpdate(_, prevState) {
     const { query, pageCounter } = this.state;
 
     if (prevState.query !== query && query !== '') {
+      this.onGettingImages(query, pageCounter);
+    }
+    if (prevState.pageCounter !== pageCounter) {
       this.onGettingImages(query, pageCounter);
     }
   }
@@ -29,8 +30,16 @@ export class App extends Component {
     try {
       const response = await getPictures(queryParam, pageCounter);
       const { hits } = await response.data;
-      console.log('data', hits);
-      this.setState({ pictures: hits });
+
+      if (!this.state.pictures.length) {
+        this.setState({ pictures: hits });
+      } else {
+        this.setState(({ pictures }) => {
+          return {
+            pictures: [...pictures, ...hits],
+          };
+        });
+      }
     } catch (e) {
       console.log(e);
     }
@@ -38,15 +47,20 @@ export class App extends Component {
   onSubmit = query => {
     this.setState({ query });
   };
+  onLoadMore = () => {
+    this.setState(({ pageCounter }) => {
+      return { pageCounter: pageCounter + 1 };
+    });
+  };
 
   render() {
     const { pictures } = this.state;
-    const isButtonDisplayed = Object.keys(pictures).length !== 0;
+    const isButtonDisplayed = pictures.length !== 0;
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
         <ImageGallery data={pictures} />
-        {isButtonDisplayed && <Button />}
+        {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
       </Container>
     );
   }

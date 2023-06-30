@@ -1,8 +1,8 @@
 import { ButtonStyled } from './Button.styled';
-const Button = () => {
+const Button = ({ onLoad }) => {
   return (
-    <ButtonStyled type="button">
-    Load more
+    <ButtonStyled type="button" onClick={onLoad}>
+      Load more
     </ButtonStyled>
   );
 };
