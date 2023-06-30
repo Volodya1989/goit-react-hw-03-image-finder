@@ -14,8 +14,34 @@ export const Overlay = styled.div`
 `;
 
 export const ModalStyled = styled.div`
+  position: relative;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
+`;
+export const ModalImg = styled.img`
+  positon: relative;
+`;
+
+export const CloseBtn = styled.button`
+  position: absolute;
+  top: 22px;
+  right: 12px;
+  cursor: pointer;
+  border: none;
+  width: 24;
+  height: 24;
+  text-align: center;
+  line-height: 0;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  background-color: transparent;
+
+  &:hover,
+  &:focus {
+    color: white;
+  }
 `;
 
 //NEED TO BE MODIFIED

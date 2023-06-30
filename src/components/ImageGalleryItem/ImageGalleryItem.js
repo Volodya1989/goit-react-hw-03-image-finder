@@ -1,9 +1,8 @@
 import { Item } from './ImageGalleryItem.styled';
-const ImageGalleryItem = ({ webformatURL }) => {
-  console.log('webformatURL', webformatURL);
+const ImageGalleryItem = ({ webformatURL, _id, tags, onClick }) => {
   return (
-    <Item>
-      <img src={webformatURL} alt="" />
+    <Item onClick={webformatURL => onClick(webformatURL)}>
+      <img src={webformatURL} alt={tags} />
     </Item>
   );
 };
