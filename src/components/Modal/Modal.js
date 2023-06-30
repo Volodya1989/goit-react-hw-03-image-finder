@@ -16,10 +16,16 @@ class Modal extends Component {
     }
   };
 
+  handleBackdropClick = e => {
+    if (e.target === e.currentTarget) {
+      this.props.onClose();
+    }
+  };
+
   render() {
     return createPortal(
-      <Overlay>
-        <ModalStyled className="modal">
+      <Overlay onClick={this.handleBackdropClick}>
+        <ModalStyled>
           <ModalImg
             className="modalImg"
             src={this.props.activeImg}
