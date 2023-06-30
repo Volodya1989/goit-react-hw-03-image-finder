@@ -1,3 +1,4 @@
+import { Component } from 'react';
 import {
   SearchbarStyled,
   Form,
@@ -5,25 +6,50 @@ import {
   ButtonStyled,
   Span,
 } from './Searchbar.styled';
-import { BsSearch } from 'react-icons/bs';
+// import { BsSearch } from 'react-icons/bs';
 
-const Searchbar = () => {
-  return (
-    <SearchbarStyled>
-      <Form>
-        <ButtonStyled type="submit">
-          <Span>
-            <BsSearch />
-          </Span>
-        </ButtonStyled>
-        <Input
-          type="text"
-          autocomplete="off"
-          autofocus
-          placeholder="Search images and photos"
-        />
-      </Form>
-    </SearchbarStyled>
-  );
-};
+class Searchbar extends Component {
+  state = {
+    queryParam: '',
+  };
+
+  handleOnChange = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({
+      [name]: value,
+    });
+  };
+  reset = () => {
+    this.setState({ queryParam: '' });
+  };
+  handleOnSubmit = e => {
+    const { queryParam } = this.state;
+    e.preventDefault();
+    console.log(queryParam);
+    this.props.onSubmit(queryParam, 1);
+
+    this.reset();
+  };
+
+  render() {
+    return (
+      <SearchbarStyled>
+        <Form onSubmit={this.handleOnSubmit}>
+          <ButtonStyled type="submit">
+            <Span>{/* <BsSearch /> */}</Span>
+          </ButtonStyled>
+          <Input
+            type="text"
+            name="queryParam"
+            autocomplete="off"
+            value={this.state.name}
+            onChange={this.handleOnChange}
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </Form>
+      </SearchbarStyled>
+    );
+  }
+}
 export default Searchbar;
