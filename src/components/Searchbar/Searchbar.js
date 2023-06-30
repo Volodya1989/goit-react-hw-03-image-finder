@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { SearchbarStyled, Form, Input, ButtonStyled } from './Searchbar.styled';
 import { BsSearch } from 'react-icons/bs';
+import Notiflix from 'notiflix';
 
 class Searchbar extends Component {
   state = {
@@ -11,6 +12,7 @@ class Searchbar extends Component {
 
   handleOnChange = e => {
     const { name, value } = e.currentTarget;
+
     value.trim();
     this.setState({
       [name]: value,
@@ -24,6 +26,13 @@ class Searchbar extends Component {
   handleOnSubmit = e => {
     const { queryParam } = this.state;
     e.preventDefault();
+    console.log(!queryParam);
+    if (queryParam.trim().length === 0) {
+      this.setState({
+        queryParam: queryParam.trim(),
+      });
+      return Notiflix.Notify.failure('Please type in some search key word');
+    }
 
     this.props.onSubmit(queryParam);
 
