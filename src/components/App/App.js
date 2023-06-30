@@ -5,6 +5,7 @@ import Button from 'components/Button';
 import ImageGallery from 'components/ImageGallery';
 import Loader from 'components/Loader';
 import Modal from 'components/Modal';
+import Notiflix from 'notiflix';
 
 import Searchbar from 'components/Searchbar';
 export class App extends Component {
@@ -39,7 +40,16 @@ export class App extends Component {
       const { hits, totalHits } = await response.data;
 
       this.totalPages = Math.ceil(Number(totalHits) / 12);
-
+      if (hits.length === 0) {
+        Notiflix.Notify.failure(
+          `Images were not found with your query. Please try again!`
+        );
+      }
+      if (this.totalPages === pageCounter) {
+        Notiflix.Notify.warning(
+          `There are no more additonal images with this query...`
+        );
+      }
       this.setState({ loading: false });
       if (!this.state.pictures.length) {
         this.setState({ pictures: hits });
@@ -89,10 +99,7 @@ export class App extends Component {
         {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
 
         {showModal && (
-          <Modal
-            activeImg={activeImg}
-            onClose={this.toggleModal}
-          />
+          <Modal activeImg={activeImg} onClose={this.toggleModal} />
         )}
       </Container>
     );
