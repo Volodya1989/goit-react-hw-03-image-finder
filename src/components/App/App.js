@@ -2,14 +2,14 @@ import { Component } from 'react';
 import { Container } from './App.styled';
 import getPictures from '../../api/API';
 // import Button from 'components/Button';
-// import ImageGallery from "components/ImageGallery";
+import ImageGallery from 'components/ImageGallery';
 // import Loader from "components/Loader";
 // import Modal from "components/Modal";
 
 import Searchbar from 'components/Searchbar';
 export class App extends Component {
   state = {
-    pictures: null,
+    pictures: {},
     query: '',
     pageCounter: 1,
   };
@@ -40,10 +40,11 @@ export class App extends Component {
   };
 
   render() {
+    const { pictures } = this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
-        React App
+        <ImageGallery data={pictures} />
         {/* <Button /> */}
       </Container>
     );

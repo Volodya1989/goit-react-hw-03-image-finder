@@ -28,6 +28,8 @@ class Searchbar extends Component {
   handleOnSubmit = e => {
     const { queryParam } = this.state;
     e.preventDefault();
+    console.log(queryParam);
+
     this.props.onSubmit(queryParam);
 
     this.reset();
@@ -44,7 +46,7 @@ class Searchbar extends Component {
             type="text"
             name="queryParam"
             autocomplete="off"
-            value={this.state.name}
+            value={this.state.queryParam}
             onChange={this.handleOnChange}
             autoFocus
             placeholder="Search images and photos"

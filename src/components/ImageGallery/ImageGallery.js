@@ -1,9 +1,17 @@
 import { List } from './ImageGallery.styled';
-const ImageGallery = () => {
+import ImageGalleryItem from 'components/ImageGalleryItem';
+const ImageGallery = ({ data }) => {
+  console.log('data', data);
+
   return (
-    <List class="gallery">
-      {/* //Set <li></li>
-  with images  */}
+    <List>
+      {data.length > 0 ? (
+        data.map(({ id, webformatURL }) => {
+          return <ImageGalleryItem key={id} webformatURL={webformatURL} />;
+        })
+      ) : (
+        <div>Type in to see an Awesome Images</div>
+      )}
     </List>
   );
 };
