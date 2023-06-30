@@ -15,18 +15,20 @@ class Searchbar extends Component {
 
   handleOnChange = e => {
     const { name, value } = e.currentTarget;
+    value.trim();
     this.setState({
       [name]: value,
     });
   };
+
   reset = () => {
     this.setState({ queryParam: '' });
   };
+
   handleOnSubmit = e => {
     const { queryParam } = this.state;
     e.preventDefault();
-    console.log(queryParam);
-    this.props.onSubmit(queryParam, 1);
+    this.props.onSubmit(queryParam);
 
     this.reset();
   };
