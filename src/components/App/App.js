@@ -3,26 +3,28 @@ import { Container } from './App.styled';
 import getPictures from '../../api/API';
 import Button from 'components/Button';
 import ImageGallery from 'components/ImageGallery';
-// import Loader from "components/Loader";
+import Loader from 'components/Loader';
 import Modal from 'components/Modal';
 
 import Searchbar from 'components/Searchbar';
 export class App extends Component {
+  static totalPages = [];
   state = {
     pictures: [],
     query: '',
     pageCounter: 1,
     showModal: false,
     activeImg: '',
+    loading: false,
   };
 
   componentDidMount() {}
   componentDidUpdate(_, prevState) {
     const { query, pageCounter } = this.state;
-
     if (prevState.query !== query && query !== '') {
       this.setState({
         pictures: [],
+        pageCounter: 1,
       });
       this.onGettingImages(query, pageCounter, query);
     }
@@ -33,9 +35,13 @@ export class App extends Component {
 
   async onGettingImages(queryParam, pageCounter) {
     try {
+      this.setState({ loading: true });
       const response = await getPictures(queryParam, pageCounter);
-      const { hits } = await response.data;
-      console.log('data', hits);
+      const { hits, totalHits } = await response.data;
+
+      this.totalPages = Math.ceil(Number(totalHits) / 12);
+
+      this.setState({ loading: false });
       if (!this.state.pictures.length) {
         this.setState({ pictures: hits });
       } else {
@@ -72,14 +78,16 @@ export class App extends Component {
   };
 
   render() {
-    const { pictures, showModal, activeImg } = this.state;
-    const isButtonDisplayed = pictures.length !== 0;
+    const { pictures, showModal, activeImg, loading, pageCounter } = this.state;
+    const isButtonDisplayed =
+      pictures.length !== 0 && this.totalPages > pageCounter;
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
-
+        {loading && <Loader />}
         <ImageGallery data={pictures} onClick={this.onClick} />
         {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
+
         {showModal && (
           <Modal
             activeImg={activeImg}
