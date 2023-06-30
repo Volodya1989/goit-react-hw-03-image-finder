@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import { Overlay, ModalStyled, CloseBtn, ModalImg } from './Modal.styled';
 const modalRootEl = document.querySelector('#modal-root');
@@ -41,3 +42,8 @@ class Modal extends Component {
   }
 }
 export default Modal;
+
+Modal.propTypes = {
+  activeImg: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

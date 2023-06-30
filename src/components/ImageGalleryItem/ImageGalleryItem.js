@@ -1,6 +1,7 @@
 import { Item } from './ImageGalleryItem.styled';
-const ImageGalleryItem = ({ webformatURL, activeImg, tags, onClick }) => {
+import PropTypes from 'prop-types';
 
+const ImageGalleryItem = ({ webformatURL, activeImg, tags, onClick }) => {
   return (
     <Item onClick={e => onClick(e, activeImg)}>
       <img src={webformatURL} alt={tags} />
@@ -8,3 +9,10 @@ const ImageGalleryItem = ({ webformatURL, activeImg, tags, onClick }) => {
   );
 };
 export default ImageGalleryItem;
+
+ImageGalleryItem.propTypes = {
+  webformatURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  activeImg: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
