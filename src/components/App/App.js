@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Container } from './App.styled';
 import getPictures from '../../api/API';
-// import Button from 'components/Button';
+import Button from 'components/Button';
 import ImageGallery from 'components/ImageGallery';
 // import Loader from "components/Loader";
 // import Modal from "components/Modal";
@@ -41,11 +41,12 @@ export class App extends Component {
 
   render() {
     const { pictures } = this.state;
+    const isButtonDisplayed = Object.keys(pictures).length !== 0;
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
         <ImageGallery data={pictures} />
-        {/* <Button /> */}
+        {isButtonDisplayed && <Button />}
       </Container>
     );
   }
