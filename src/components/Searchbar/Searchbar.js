@@ -1,12 +1,6 @@
 import { Component } from 'react';
-import {
-  SearchbarStyled,
-  Form,
-  Input,
-  ButtonStyled,
-  Span,
-} from './Searchbar.styled';
-// import { BsSearch } from 'react-icons/bs';
+import { SearchbarStyled, Form, Input, ButtonStyled } from './Searchbar.styled';
+import { BsSearch } from 'react-icons/bs';
 
 class Searchbar extends Component {
   state = {
@@ -39,7 +33,7 @@ class Searchbar extends Component {
       <SearchbarStyled>
         <Form onSubmit={this.handleOnSubmit}>
           <ButtonStyled type="submit">
-            <Span>{/* <BsSearch /> */}</Span>
+            <BsSearch />
           </ButtonStyled>
           <Input
             type="text"
