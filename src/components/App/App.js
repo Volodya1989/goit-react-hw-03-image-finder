@@ -11,14 +11,13 @@ export class App extends Component {
   static totalPages = [];
   state = {
     pictures: [],
-    query: '',
     pageCounter: 1,
-    showModal: false,
+    query: '',
     activeImg: '',
+    showModal: false,
     loading: false,
   };
 
-  componentDidMount() {}
   componentDidUpdate(_, prevState) {
     const { query, pageCounter } = this.state;
     if (prevState.query !== query && query !== '') {
@@ -81,6 +80,7 @@ export class App extends Component {
     const { pictures, showModal, activeImg, loading, pageCounter } = this.state;
     const isButtonDisplayed =
       pictures.length !== 0 && this.totalPages > pageCounter;
+
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
@@ -91,7 +91,6 @@ export class App extends Component {
         {showModal && (
           <Modal
             activeImg={activeImg}
-            showModal={showModal}
             onClose={this.toggleModal}
           />
         )}
