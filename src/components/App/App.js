@@ -21,10 +21,13 @@ export class App extends Component {
     const { query, pageCounter } = this.state;
 
     if (prevState.query !== query && query !== '') {
-      this.onGettingImages(query, pageCounter);
+      this.setState({
+        pictures: [],
+      });
+      this.onGettingImages(query, pageCounter, query);
     }
     if (prevState.pageCounter !== pageCounter) {
-      this.onGettingImages(query, pageCounter);
+      this.onGettingImages(query, pageCounter, query);
     }
   }
 
@@ -61,16 +64,11 @@ export class App extends Component {
   };
 
   onClick = (e, img) => {
-    console.log('click');
-    console.log('e', e.target);
-    console.log('id', img);
     this.setState({
       activeImg: img,
     });
-    console.log('thisState', this.state.activeImg);
 
     this.toggleModal();
-    console.log('activeImg', this.state.activeImg);
   };
 
   render() {
@@ -83,7 +81,11 @@ export class App extends Component {
         <ImageGallery data={pictures} onClick={this.onClick} />
         {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
         {showModal && (
-          <Modal activeImg={activeImg} onClick={() => this.toggleModal()} />
+          <Modal
+            activeImg={activeImg}
+            showModal={showModal}
+            onClose={this.toggleModal}
+          />
         )}
       </Container>
     );
