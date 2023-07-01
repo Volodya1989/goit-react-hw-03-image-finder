@@ -46,7 +46,7 @@ export class App extends Component {
         );
       }
       if (this.totalPages === pageCounter) {
-        Notiflix.Notify.warning(
+        Notiflix.Notify.info(
           `There are no more additonal images with this query...`
         );
       }
