@@ -9,63 +9,63 @@ import Notiflix from 'notiflix';
 
 import Searchbar from 'components/Searchbar';
 export class App extends Component {
-  static totalPages = [];
   state = {
     pictures: [],
     pageCounter: 1,
     query: '',
     activeImg: '',
-    showModal: false,
-    loading: false,
+    isShowModal: false,
+    isLoading: false,
+    isLoadMore: false,
   };
 
   componentDidUpdate(_, prevState) {
     const { query, pageCounter } = this.state;
-    if (prevState.query !== query && query !== '') {
-      this.setState({
-        pictures: [],
-        pageCounter: 1,
-      });
-      this.onGettingImages(query, pageCounter, query);
-    }
-    if (prevState.pageCounter !== pageCounter) {
+    if (prevState.query !== query || prevState.pageCounter !== pageCounter) {
       this.onGettingImages(query, pageCounter, query);
     }
   }
 
   async onGettingImages(queryParam, pageCounter) {
     try {
-      this.setState({ loading: true });
+      this.setState({ isLoading: true });
       const response = await getPictures(queryParam, pageCounter);
       const { hits, totalHits } = await response.data;
+      this.setState({ isLoading: false });
 
-      this.totalPages = Math.ceil(Number(totalHits) / 12);
+      this.setState(({ pictures }) => {
+        return {
+          pictures: [...pictures, ...hits],
+        };
+      });
+      this.setState({
+        isLoadMore: pageCounter < Math.ceil(Number(totalHits) / 12),
+      });
+      if (totalHits !== 0 && pageCounter === 1) {
+        Notiflix.Notify.success(
+          `We have found ${totalHits} images for you to see!`
+        );
+      }
+
       if (hits.length === 0) {
         Notiflix.Notify.failure(
           `Images were not found with your query. Please try again!`
         );
       }
-      if (this.totalPages === pageCounter) {
-        Notiflix.Notify.info(
-          `There are no more additonal images with this query...`
-        );
-      }
-      this.setState({ loading: false });
-      if (!this.state.pictures.length) {
-        this.setState({ pictures: hits });
-      } else {
-        this.setState(({ pictures }) => {
-          return {
-            pictures: [...pictures, ...hits],
-          };
-        });
-      }
+
+      setTimeout(() => {
+        if (!this.state.isLoadMore && pageCounter > 1) {
+          Notiflix.Notify.info(
+            `There are no more additonal images with this query...`
+          );
+        }
+      }, 500);
     } catch (e) {
       console.log(e);
     }
   }
   onSubmit = query => {
-    this.setState({ query });
+    this.setState({ query: query.trim(), pictures: [], pageCounter: 1 });
   };
   onLoadMore = () => {
     this.setState(({ pageCounter }) => {
@@ -73,12 +73,12 @@ export class App extends Component {
     });
   };
   toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
+    this.setState(({ isShowModal }) => ({
+      isShowModal: !isShowModal,
     }));
   };
 
-  onClick = (e, img) => {
+  onClick = (_, img) => {
     this.setState({
       activeImg: img,
     });
@@ -87,18 +87,17 @@ export class App extends Component {
   };
 
   render() {
-    const { pictures, showModal, activeImg, loading, pageCounter } = this.state;
-    const isButtonDisplayed =
-      pictures.length !== 0 && this.totalPages > pageCounter;
+    const { pictures, isShowModal, activeImg, isLoading, isLoadMore } =
+      this.state;
 
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
-        {loading && <Loader />}
+        {isLoading && <Loader />}
         <ImageGallery data={pictures} onClick={this.onClick} />
-        {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
+        {isLoadMore && <Button onLoad={this.onLoadMore} />}
 
-        {showModal && (
+        {isShowModal && (
           <Modal activeImg={activeImg} onClose={this.toggleModal} />
         )}
       </Container>
