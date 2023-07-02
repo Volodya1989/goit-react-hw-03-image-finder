@@ -21,16 +21,17 @@ export class App extends Component {
 
   componentDidUpdate(_, prevState) {
     const { query, pageCounter } = this.state;
-    if (prevState.query !== query && query !== '') {
-      this.setState({
-        pictures: [],
-        pageCounter: 1,
-      });
+    if (prevState.query !== query || prevState.pageCounter !== pageCounter) {
+      console.log('inside didUpdate');
+      // this.setState({
+      //   pictures: [],
+      //   pageCounter: 1,
+      // });
       this.onGettingImages(query, pageCounter, query);
     }
-    if (prevState.pageCounter !== pageCounter) {
-      this.onGettingImages(query, pageCounter, query);
-    }
+    // if (prevState.pageCounter !== pageCounter) {
+    //   this.onGettingImages(query, pageCounter, query);
+    // }
   }
 
   async onGettingImages(queryParam, pageCounter) {
@@ -65,10 +66,12 @@ export class App extends Component {
     }
   }
   onSubmit = query => {
-    this.setState({ query });
+    console.log('onSubmit is called');
+    this.setState({ query, pictures: [], pageCounter: 1 });
   };
   onLoadMore = () => {
     this.setState(({ pageCounter }) => {
+      console.log('pageCounter', pageCounter);
       return { pageCounter: pageCounter + 1 };
     });
   };

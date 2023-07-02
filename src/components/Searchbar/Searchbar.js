@@ -6,6 +6,7 @@ import { BsSearch } from 'react-icons/bs';
 import Notiflix from 'notiflix';
 
 class Searchbar extends Component {
+  static oldQuery = null;
   state = {
     queryParam: '',
   };
@@ -22,6 +23,16 @@ class Searchbar extends Component {
   reset = () => {
     this.setState({ queryParam: '' });
   };
+  componentDidUpdate(_, prevState) {
+    const { queryParam } = this.state;
+    console.log(prevState.queryParam);
+    if (prevState.queryParam !== queryParam) {
+      console.log('state updated for queryParam');
+      this.setState({
+        queryParam,
+      });
+    }
+  }
 
   handleOnSubmit = e => {
     const { queryParam } = this.state;
@@ -32,6 +43,16 @@ class Searchbar extends Component {
       });
       return Notiflix.Notify.failure('Please type in some search key word');
     }
+    console.log('oldQuery', this.oldQuery);
+    if (this.oldQuery === queryParam) {
+      this.reset();
+
+      return Notiflix.Notify.info(
+        'This is the same query that you have already  entered. Please type new one for new results.'
+      );
+    }
+    this.oldQuery = queryParam;
+    console.log('oldQuery', this.oldQuery);
 
     this.props.onSubmit(queryParam);
 
