@@ -41,17 +41,25 @@ export class App extends Component {
       this.setState({
         isLoadMore: pageCounter < Math.ceil(Number(totalHits) / 12),
       });
+      if (totalHits !== 0 && pageCounter === 1) {
+        Notiflix.Notify.success(
+          `We have found ${totalHits} images for you to see!`
+        );
+      }
 
       if (hits.length === 0) {
         Notiflix.Notify.failure(
           `Images were not found with your query. Please try again!`
         );
       }
-      if (this.totalPages === pageCounter) {
-        Notiflix.Notify.info(
-          `There are no more additonal images with this query...`
-        );
-      }
+
+      setTimeout(() => {
+        if (!this.state.isLoadMore && pageCounter > 1) {
+          Notiflix.Notify.info(
+            `There are no more additonal images with this query...`
+          );
+        }
+      }, 500);
     } catch (e) {
       console.log(e);
     }
