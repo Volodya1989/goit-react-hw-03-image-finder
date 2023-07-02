@@ -22,16 +22,8 @@ export class App extends Component {
   componentDidUpdate(_, prevState) {
     const { query, pageCounter } = this.state;
     if (prevState.query !== query || prevState.pageCounter !== pageCounter) {
-      console.log('inside didUpdate');
-      // this.setState({
-      //   pictures: [],
-      //   pageCounter: 1,
-      // });
       this.onGettingImages(query, pageCounter, query);
     }
-    // if (prevState.pageCounter !== pageCounter) {
-    //   this.onGettingImages(query, pageCounter, query);
-    // }
   }
 
   async onGettingImages(queryParam, pageCounter) {
@@ -39,6 +31,14 @@ export class App extends Component {
       this.setState({ loading: true });
       const response = await getPictures(queryParam, pageCounter);
       const { hits, totalHits } = await response.data;
+      this.setState({ loading: false });
+
+      this.setState(({ pictures }) => {
+        return {
+          pictures: [...pictures, ...hits],
+        };
+      });
+      console.log('pictures state update', this.state.pictures);
 
       this.totalPages = Math.ceil(Number(totalHits) / 12);
       if (hits.length === 0) {
@@ -51,27 +51,27 @@ export class App extends Component {
           `There are no more additonal images with this query...`
         );
       }
-      this.setState({ loading: false });
-      if (!this.state.pictures.length) {
-        this.setState({ pictures: hits });
-      } else {
-        this.setState(({ pictures }) => {
-          return {
-            pictures: [...pictures, ...hits],
-          };
-        });
-      }
+      // this.setState({ loading: false });
+      // if (!this.state.pictures.length) {
+      //   this.setState({ pictures: hits });
+      // } else {
+      //   this.setState(({ pictures }) => {
+      //     return {
+      //       pictures: [...pictures, ...hits],
+      //     };
+      //   });
+      // }
     } catch (e) {
       console.log(e);
     }
   }
   onSubmit = query => {
-    console.log('onSubmit is called');
-    this.setState({ query, pictures: [], pageCounter: 1 });
+    // console.log('onSubmit is called');
+    this.setState({ query: query.trim(), pictures: [], pageCounter: 1 });
   };
   onLoadMore = () => {
     this.setState(({ pageCounter }) => {
-      console.log('pageCounter', pageCounter);
+      // console.log('pageCounter', pageCounter);
       return { pageCounter: pageCounter + 1 };
     });
   };
@@ -81,7 +81,7 @@ export class App extends Component {
     }));
   };
 
-  onClick = (e, img) => {
+  onClick = (_, img) => {
     this.setState({
       activeImg: img,
     });

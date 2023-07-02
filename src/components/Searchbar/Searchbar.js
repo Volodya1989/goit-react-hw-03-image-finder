@@ -8,13 +8,12 @@ import Notiflix from 'notiflix';
 class Searchbar extends Component {
   static oldQuery = null;
   state = {
-    queryParam: '',
+    queryParam: ''.trim(),
   };
 
   handleOnChange = e => {
     const { name, value } = e.currentTarget;
 
-    value.trim();
     this.setState({
       [name]: value,
     });
@@ -26,10 +25,9 @@ class Searchbar extends Component {
   componentDidUpdate(_, prevState) {
     const { queryParam } = this.state;
     console.log(prevState.queryParam);
-    if (prevState.queryParam !== queryParam) {
-      console.log('state updated for queryParam');
+    if (prevState.queryParam.trim() !== queryParam.trim()) {
       this.setState({
-        queryParam,
+        queryParam: queryParam.trim(),
       });
     }
   }
@@ -43,16 +41,16 @@ class Searchbar extends Component {
       });
       return Notiflix.Notify.failure('Please type in some search key word');
     }
-    console.log('oldQuery', this.oldQuery);
-    if (this.oldQuery === queryParam) {
+    if (this.oldQuery && this.oldQuery.trim() === queryParam.trim()) {
       this.reset();
 
       return Notiflix.Notify.info(
         'This is the same query that you have already  entered. Please type new one for new results.'
       );
     }
-    this.oldQuery = queryParam;
-    console.log('oldQuery', this.oldQuery);
+    this.oldQuery = queryParam.trim();
+    // console.log('oldQuery', this.oldQuery.length);
+    // console.log('state queryQuery', queryParam.length);
 
     this.props.onSubmit(queryParam);
 
