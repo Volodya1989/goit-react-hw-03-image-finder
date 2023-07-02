@@ -9,7 +9,7 @@ import Notiflix from 'notiflix';
 
 import Searchbar from 'components/Searchbar';
 export class App extends Component {
-  static totalPages = [];
+  // static totalPages = [];
   state = {
     pictures: [],
     pageCounter: 1,
@@ -17,6 +17,7 @@ export class App extends Component {
     activeImg: '',
     showModal: false,
     loading: false,
+    loadMore: false,
   };
 
   componentDidUpdate(_, prevState) {
@@ -38,9 +39,18 @@ export class App extends Component {
           pictures: [...pictures, ...hits],
         };
       });
-      console.log('pictures state update', this.state.pictures);
+      // this.totalPages = Math.ceil(Number(totalHits) / 12);
+      // console.log(
+      //   'load more state',
+      //   pageCounter < Math.ceil(Number(totalHits) / 12)
+      // );
+      this.setState({
+        loadMore: pageCounter < Math.ceil(Number(totalHits) / 12),
+      });
+      // console.log('totalHits', totalHits);
 
-      this.totalPages = Math.ceil(Number(totalHits) / 12);
+      // console.log('loadMore state', this.state.loadMore);
+
       if (hits.length === 0) {
         Notiflix.Notify.failure(
           `Images were not found with your query. Please try again!`
@@ -90,16 +100,18 @@ export class App extends Component {
   };
 
   render() {
-    const { pictures, showModal, activeImg, loading, pageCounter } = this.state;
-    const isButtonDisplayed =
-      pictures.length !== 0 && this.totalPages > pageCounter;
+    const { pictures, showModal, activeImg, loading, pageCounter, loadMore } =
+      this.state;
+    // const isButtonDisplayed =
+    //   pictures.length !== 0 && this.totalPages > pageCounter;
 
     return (
       <Container>
         <Searchbar onSubmit={this.onSubmit} />
         {loading && <Loader />}
         <ImageGallery data={pictures} onClick={this.onClick} />
-        {isButtonDisplayed && <Button onLoad={this.onLoadMore} />}
+        {/* {isButtonDisplayed && <Button onLoad={this.onLoadMore} />} */}
+        {loadMore && <Button onLoad={this.onLoadMore} />}
 
         {showModal && (
           <Modal activeImg={activeImg} onClose={this.toggleModal} />
