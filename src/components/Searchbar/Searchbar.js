@@ -24,7 +24,6 @@ class Searchbar extends Component {
   };
   componentDidUpdate(_, prevState) {
     const { queryParam } = this.state;
-    // console.log(prevState.queryParam);
     if (prevState.queryParam.trim() !== queryParam.trim()) {
       this.setState({
         queryParam: queryParam.trim(),
@@ -49,8 +48,7 @@ class Searchbar extends Component {
       );
     }
     this.oldQuery = queryParam.trim();
-    // console.log('oldQuery', this.oldQuery.length);
-    // console.log('state queryQuery', queryParam.length);
+
 
     this.props.onSubmit(queryParam);
 
